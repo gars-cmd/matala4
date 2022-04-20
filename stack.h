@@ -11,4 +11,5 @@ node* push(char *element, node *head);
 node *pop(node *head);
 void destroy_stack(node *p);
 void show_top(node* head);
+void display(node *head);
 int firstWordI(int size,const char* line);

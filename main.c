@@ -14,57 +14,63 @@ int main(int argc, char const *argv[])
     while (1)
     {
         int index,rest,cmd_size;
+        // initialize the cmd buffer
+        char command[MAX_SIZE];
+        memset(command,0,MAX_SIZE);
         printf("wait for command ...> ");
-        fflush(stdout);
-        char command[1024];
-
-        // getting the input command 
         scanf("%[^\n]%*c",&command);
         cmd_size = strlen(command);
-        // printf("the size of the command is %d\n",cmd_size);
-        //getting the index of the first word
         index = firstWordI(cmd_size,command);
-        // printf("got the value index = %d\n",index);
-        // getting the size of the rest of the input
         rest = cmd_size-index;
 
         //get the command 
         char cmd[index];
         memset(cmd,0,index+1);
         strncpy(cmd , command , index);
-        // printf("we get the command %s\n",cmd);
         fflush(stdout);
 
+        // if we there is not parameter to the command
         if (rest == 0)
         {
+            // show the top of the stack
             if (strcmp(cmd,"TOP")==0)
             {
                 show_top(top);
             }
-            if (strcmp(cmd , "POP")==0)
+            // delete the top element of the stack
+            else if (strcmp(cmd , "POP")==0)
             {
                 top = pop(top);
             }
-            // if (strcmp(cmd , "SHOW")==0)
-            // {
-            //     display(top);
-            // }
-            if (strcmp(cmd,"TEST")==0)
+            // show the entire stack
+            else if (strcmp(cmd , "SHOW")==0)
             {
-                printf("test passed");
+                display(top);
             }
-            if (strcmp(cmd,"EXIT")==0)
+            // destroy the entire stack
+            else if (strcmp(cmd,"RESET")==0)
+            {
+                destroy_stack(top);
+                top = NULL;
+            }
+            // exit the program
+            else if (strcmp(cmd,"EXIT")==0)
             {
                 exit(EXIT_SUCCESS);
             }
-            
+            // if a not valid/recognized command was typed
+            else
+            {
+                printf("DEBUG:No command recognized\n");
+            }
             
         }
         // the case of a push command 
         else
         {
         char data[rest];
-        strncpy(data , &command[index] , rest);
+        memset(data,0,rest);
+        strncpy(data , &command[index+1] , rest-1);
         if (strcmp(cmd,"PUSH")==0)
         {
             top = push(data,top);

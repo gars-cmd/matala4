@@ -11,7 +11,6 @@ stack.o: stack.c
 run: main.o stack.o
 	gcc $(FLAG) -o run main.o stack.o
 
-
 .PHONY: clean all
 
 clean:
