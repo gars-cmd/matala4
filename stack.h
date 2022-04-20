@@ -6,10 +6,9 @@ typedef struct node
     struct node *next;
 } node;
 
-
-node* push(char *element, node *head);
+node *push(char *element, node *head);
 node *pop(node *head);
 void destroy_stack(node *p);
-void show_top(node* head);
 void display(node *head);
-int firstWordI(int size,const char* line);
+char *show_top(node *head);
+int firstWordI(int size, const char *line);
