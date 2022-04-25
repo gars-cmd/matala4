@@ -13,27 +13,23 @@
 #include <pthread.h>
 #include "stack.h"
 #include <signal.h>
-//------------------------------------PARAMS PART--------------------------------
+//------------------------------------PARAMS PART-----------------------------------------------------------------
 #define MAX_SIZE 1024
 #define PORT "3490"
 #define BACKLOG 10
 
-int counter = 0;
-int cc = 0;
 node *top = NULL;
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
 void *handler_connect(int *client);
 void stack_call(int *client, char *command);
-void sig_handler();
 void *get_in_addr(struct sockaddr *sa);
-
 
 
 int main(int argc, char const *argv[])
 {
 
-    // ------------------------------------------------------------------------SERVER PART---------------------------------------------------------
+    // ------------------------------SERVER PART-------------------------------------------------------------------
     int sockfd, new_fd; // listen on sock_fd, new connection on new_fd
     struct addrinfo hints, *servinfo, *p;
     struct sockaddr_storage their_addr; // connector's address information
@@ -124,18 +120,11 @@ int main(int argc, char const *argv[])
 
             return 1;
         }
-        else
-        {
-            counter++;
-        }
-
-        printf("\nthread number %d\n", counter);
 
         inet_ntop(their_addr.ss_family,
                   get_in_addr((struct sockaddr *)&their_addr),
                   s, sizeof s);
         printf("server: got connection from %s\n", s);
-        signal(SIGINT , sig_handler);
     }
     
 
@@ -143,20 +132,13 @@ int main(int argc, char const *argv[])
 }
 
 
-//---------------------------------------------------------HANDLE PART-----------------------------------------
+//--------------------------------------------HANDLE PART--------------------------------------------------------
 
 
 void *handler_connect(int *client)
 {
 
     pthread_mutex_lock(&mutex);
-
-//-----------ONLY FOR TEST --------------
-    for (size_t i = 0; i < 10; i++)
-    {
-        cc++;
-    }
-//-----------ONLY FOR TEST --------------
     
     int socketC = *client;
     char ans[MAX_SIZE];
@@ -178,20 +160,13 @@ void *handler_connect(int *client)
     return NULL;
 }
 
-//---------------------------------------------------------------STACK PART----------------------------------------------------------------
+//---------------------------------------------STACK PART----------------------------------------------------------------
 
 void stack_call(int *client, char *command)
 {
-    // while (1)
-    // {
     int index, rest, cmd_size;
-    // initialize the cmd buffer
-
-    // char command[MAX_SIZE];
-    // memset(command, 0, MAX_SIZE);
 
     printf("wait for command from the client\n");
-    // scanf("%[^\n]%*c", &command);
 
     cmd_size = strlen(command);
     index = firstWordI(cmd_size, command);
@@ -203,7 +178,7 @@ void stack_call(int *client, char *command)
     strncpy(cmd, command, index);
     fflush(stdout);
 
-    // if we there is not parameter to the command
+    // if there is not parameter to the command
     if (rest == 0)
     {
         // show the top of the stack
@@ -218,11 +193,11 @@ void stack_call(int *client, char *command)
 
             else if ((tmp = send(*client, tosend, MAX_SIZE, 0)) == -1)
             {
-                perror("TOP...");
+                perror("ERROR:TOP...");
             }
             else
             {
-                printf("send succeed\n");
+                printf("DEBUG:send succeed\n");
                 fflush(stdout);
             }
         }
@@ -278,9 +253,4 @@ void *get_in_addr(struct sockaddr *sa)
     return &(((struct sockaddr_in6 *)sa)->sin6_addr);
 }
 
-void sig_handler()
-{
-    printf("\nthe cc val is %d\n",cc);
-    fflush(stdout);
-    exit(0);
-}
+

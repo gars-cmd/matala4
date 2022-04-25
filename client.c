@@ -11,6 +11,7 @@
 #include <sys/types.h>
 #include <netinet/in.h>
 #include <sys/socket.h>
+#include "stack.h"
 
 #include <arpa/inet.h>
 
@@ -66,7 +67,7 @@ int main(int argc, char *argv[])
         if (connect(sockfd, p->ai_addr, p->ai_addrlen) == -1)
         {
             close(sockfd);
-            perror("client: connect");
+            // perror("client: connect");
             continue;
         }
 
@@ -75,16 +76,16 @@ int main(int argc, char *argv[])
 
     if (p == NULL)
     {
-        fprintf(stderr, "client: failed to connect\n");
+        // fprintf(stderr, "client: failed to connect\n");
         return 2;
     }
 
     inet_ntop(p->ai_family, get_in_addr((struct sockaddr *)p->ai_addr),
               s, sizeof s);
-    printf("client: connecting to %s\n", s);
+    printf("DEBUG:client: connecting to %s\n", s);
 
     freeaddrinfo(servinfo); // all done with this structure
-    printf("enter a command for the server -->");
+    printf("DEBUG:enter a command for the server -->");
     scanf("%[^\n]%*c", &buf);
     // printf("buf = %s\n", buf);
     if ((numbytes = send(sockfd, buf, MAXDATASIZE - 1, 0)) == -1)
@@ -96,26 +97,26 @@ int main(int argc, char *argv[])
     else
     {
         // printf("buff2 = %s of size %d\n", buf, strlen(buf));
-        printf("the send success\n");
+        printf("DEBUG:the send success\n");
         fflush(stdout);
     }
-    char *cmd = malloc(4);
+    char *cmd = malloc_X(4);
     memset(cmd, 0, MAXDATASIZE);
     memcpy(cmd, buf, 4);
     if (strcmp(cmd, "TOP") != 0)
     {
         close(sockfd);
-        free(cmd);
+        free_X(cmd);
         exit(0);
     }
     else
     {
-        printf("cmd = -%s-\t|buf = %s\n", cmd, buf);
-        free(cmd);
+        // printf("cmd = -%s-\t|buf = %s\n", cmd, buf);
+        free_X(cmd);
         memset(buf, 0, MAXDATASIZE);
         if ((numbytes = recv(sockfd, buf, MAXDATASIZE, 0)) == -1)
         {
-            perror("recv...");
+            perror("ERROR:recv...");
             exit(1);
         }
         else

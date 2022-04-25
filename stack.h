@@ -6,6 +6,17 @@ typedef struct node
     struct node *next;
 } node;
 
+// typedef struct dynamic_mem
+// {
+//     size_t size;
+//     struct dynamic_mem* next;
+// }dynamic_mem;
+
+// static const size_t align_to = 16;
+
+int div_round(int a , int b);
+void* malloc_X(size_t size);
+void free_X(void* ptr);
 node *push(char *element, node *head);
 node *pop(node *head);
 void destroy_stack(node *p);

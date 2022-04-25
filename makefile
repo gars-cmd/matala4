@@ -1,6 +1,6 @@
 FLAG = -Wall -g
 
-all: server.o stack.o client.o client run
+all: server.o stack.o client.o client server
 
 server.o: server.c 
 	gcc $(FLAG) -c server.c
@@ -12,13 +12,13 @@ stack.o: stack.c
 	gcc $(FLAG) -c stack.c
 
 client: client.o
-	gcc $(FLAG) -o client client.o
+	gcc $(FLAG) -o client client.o stack.o
 
-run: server.o stack.o
-	gcc $(FLAG) -lpthread -o run server.o stack.o
+server: server.o stack.o
+	gcc $(FLAG) -lpthread -o server server.o stack.o
 
 .PHONY: clean all
 
 clean:
-	rm -f *.o run 
+	rm -f *.o server client 
 	
