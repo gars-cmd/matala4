@@ -23,7 +23,7 @@
 - `RESET` To clear all the stack.
 - `EXIT` To exit the program to the client and also to the server.
 - `SHOW` Show the all stack to the server.
-- `TEST` Run the main commands of the prjects that are tested by asset.h library (the display is made in the server terminal) 
+- `TEST` Run the main commands of the projects that are tested by asset.h library (the display is made in the server terminal) 
 >	Note: all the commands must be in UPPERCASE
 
 
